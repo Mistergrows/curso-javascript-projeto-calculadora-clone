@@ -17,7 +17,10 @@ class CalcControler {
     pasteFromClipboard(){
         document.addEventListener('paste', e=>{
             let text = e.clipboardData.getData('Text');
+            
             this.displayCalc = parseFloat(text)
+
+            console.log(text);
         })
     }
 
@@ -133,8 +136,13 @@ class CalcControler {
     }
 
     getResult() {
-
-        return eval(this._operation.join(''));
+        try{
+            return eval(this._operation.join(''));
+        }catch(e){
+                setTimeout(()=>{
+                    this.setError();
+                }, 1);
+        }    
     }
 
     calc() {
@@ -345,6 +353,11 @@ class CalcControler {
     }
 
     set displayCalc(valor) {
+        
+        if(valor.toString().length > 10){
+            this.setError();
+            return false;
+        }
         this._displayCalcEl.innerHTML = valor;
     }
 
